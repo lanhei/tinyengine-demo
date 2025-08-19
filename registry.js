@@ -12,7 +12,7 @@
 import { META_SERVICE, META_APP } from '@opentiny/tiny-engine-meta-register';
 import engineConfig from './engine.config';
 import { HttpService } from './src/composable';
-import { PluginDemoService } from 'demo-plugin';
+import pluginConfig from 'demo-plugin';
 
 export default {
   [META_SERVICE.Http]: HttpService,
@@ -20,31 +20,70 @@ export default {
     ...engineConfig
   },
   'engine.plugins.pluginDemo': {
-    ...PluginDemoService,
-    id: 'engine.plugins.pluginDemo'
+    ...pluginConfig
   },
   // 调整插件顺序示例:
+  // [META_APP.Layout]: {
+  //   options: {
+  //     relativeLayoutConfig: {
+  //       [META_APP.Page]: {
+  //         insertBefore: META_APP.State
+  //       },
+  //       // 调整插件顺序
+  //       [META_APP.OutlineTree]: {
+  //         insertAfter: META_APP.Materials
+  //       },
+  //       // 调整插件上下位置
+  //       [META_APP.Schema]: {
+  //         insertBefore: META_APP.Help
+  //       },
+  //       // 调整工具栏顺序
+  //       [META_APP.Save]: {
+  //         insertAfter: META_APP.GenerateCode
+  //       },
+  //       // 支持切换组
+  //       [META_APP.Lang]: {
+  //         insertAfter: META_APP.ViewSetting
+  //       }
+  //     }
+  //   }
+  // }
   [META_APP.Layout]: {
     options: {
-      relativeLayoutConfig: {
-        [META_APP.Page]: {
-          insertBefore: META_APP.State
+      layoutConfig: {
+        plugins: {
+          left: {
+            top: [
+              META_APP.Materials,
+              META_APP.OutlineTree,
+              META_APP.AppManage,
+              META_APP.BlockManage,
+              META_APP.Collections,
+              META_APP.Bridge,
+              META_APP.I18n,
+              META_APP.PageController,
+              META_APP.State
+            ],
+            bottom: [META_APP.Schema, META_APP.EditorHelp, META_APP.Robot, 'engine.plugins.pluginDemo']
+          },
+          right: {
+            top: [META_APP.Props, META_APP.Styles, META_APP.Event]
+          }
         },
-        // 调整插件顺序
-        [META_APP.OutlineTree]: {
-          insertAfter: META_APP.Materials
-        },
-        // 调整插件上下位置
-        [META_APP.Schema]: {
-          insertBefore: META_APP.Help
-        },
-        // 调整工具栏顺序
-        [META_APP.Save]: {
-          insertAfter: META_APP.GenerateCode
-        },
-        // 支持切换组
-        [META_APP.Lang]: {
-          insertAfter: META_APP.ViewSetting
+        toolbars: {
+          left: [META_APP.Breadcrumb, META_APP.Lock, META_APP.Logo],
+          center: [META_APP.Media],
+          right: [
+            [META_APP.ThemeSwitch, META_APP.RedoUndo, META_APP.Clean],
+            [META_APP.Preview],
+            [META_APP.GenerateCode, META_APP.Save]
+          ],
+          collapse: [
+            [META_APP.Collaboration],
+            [META_APP.Refresh, META_APP.Fullscreen],
+            [META_APP.Lang],
+            [META_APP.ViewSetting]
+          ]
         }
       }
     }
